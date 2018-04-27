@@ -1,0 +1,2 @@
+# serverless-sequelize-migration
+
