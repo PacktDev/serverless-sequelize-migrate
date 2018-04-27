@@ -1,0 +1,24 @@
+{
+  "name": "serverless-sequelize-migrate",
+  "version": "0.0.1",
+  "description":
+    "An Serverless framework handler to execute post deploy to do sequelize migrations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Packt Publishing Ltd",
+    "url": "https://packtpub.com/"
+  },
+  "contributors": [
+    {
+      "name": "Mike Elsmore",
+      "email": "mike@builtbyme.tech"
+    }
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "umzug": "^2.1.0"
+  }
+}
