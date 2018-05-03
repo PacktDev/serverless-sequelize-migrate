@@ -1,26 +1,28 @@
-const Umzug = require('umzug');
-const Sequelize = require('sequelize');
+import Umzug from'umzug';
+import Sequelize from'sequelize';
 
-modules.exports = config => {
-  const sequelize = new Sequelize(config.dbName, config.dbUser, config.dbPass, {
-    host: config.dbHost,
-    dialect: 'postgres'
-  });
+export class Migration {
+  constructor(config) {
+    this.sequelize = new Sequelize(config.dbName, config.dbUser, config.dbPass, {
+      host: config.dbHost,
+      dialect: 'postgres'
+    });
 
-  const umzug = new Umzug({
-    storage: 'sequelize',
-    storageOptions: {
-      sequelize: sequelize
-    },
-    migrations: {
-      params: [sequelize.getQueryInterface(), Sequelize],
-      path: config.migrations,
-      pattern: /\.js$/
-    }
-  });
+    this.umzug = new Umzug({
+      storage: 'sequelize',
+      storageOptions: {
+        sequelize: this.sequelize
+      },
+      migrations: {
+        params: [this.sequelize.getQueryInterface(), Sequelize],
+        path: config.migrations,
+        pattern: /\.js$/
+      }
+    });
+  }
 
-  const up = (event, context, callback) => {
-    umzug
+  up(event, context, callback) {
+    this.umzug
       .up()
       .then(() => {
         const response = {
@@ -37,8 +39,8 @@ modules.exports = config => {
       });
   };
 
-  const down = (event, context, callback) => {
-    umzug
+  down(event, context, callback) {
+    this.umzug
       .down()
       .then(() => {
         const response = {
@@ -54,9 +56,4 @@ modules.exports = config => {
         callback(error, error);
       });
   };
-
-  return {
-    up,
-    down
-  };
-};
+}
