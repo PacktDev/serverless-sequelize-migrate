@@ -1,6 +1,6 @@
 {
   "name": "@packt/serverless-sequelize-migrate",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An Serverless framework handler to execute post deploy to do sequelize migrations",
   "repository": {
     "type": "git",
