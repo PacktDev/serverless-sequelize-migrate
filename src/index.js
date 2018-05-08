@@ -23,10 +23,14 @@ export default class Migration {
     });
 
     // Check that the database exists
-    this.sequelize.query(`SELECT 1 FROM pg_catalog.pg_database WHERE datname = '${config.dbName}'`)
+    const dbConnection = new Sequelize('postgres', config.dbUser, config.dbPass, {
+      host: config.dbHost,
+      dialect: 'postgres'
+    });
+    dbConnection.query(`SELECT 1 FROM pg_catalog.pg_database WHERE datname = '${config.dbName}'`)
     .then((database)=>{
       if(!database[1].rowCount) {
-        return sequelize.query(`CREATE DATABASE ${queryInterface.quoteIdentifier(config.dbName)}`);
+        return dbConnection.query(`CREATE DATABASE '${config.dbName}'`);
       }
       return Promise.resolve()
     })
