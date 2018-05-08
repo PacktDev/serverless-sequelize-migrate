@@ -1,5 +1,6 @@
 import Umzug from'umzug';
-import Sequelize from'sequelize';
+import Sequelize from 'sequelize';
+const { Client } from 'pg';
 
 export default class Migration {
   constructor(config) {
@@ -21,40 +22,53 @@ export default class Migration {
         pattern: /\.js$/
       }
     });
-
-    // Check that the database exists
-    const dbConnection = new Sequelize('postgres', config.dbUser, config.dbPass, {
-      host: config.dbHost,
-      dialect: 'postgres'
-    });
-    dbConnection.query(`SELECT 1 FROM pg_catalog.pg_database WHERE datname = '${config.dbName}'`)
-    .then((database)=>{
-      if(!database[1].rowCount) {
-        return dbConnection.query(`CREATE DATABASE '${config.dbName}'`);
-      }
-      return Promise.resolve()
-    })
-    .then(()=>{
-      console.log(`Finished checking ${config.dbName} exists before migrating`)
-    })
   }
 
   up(event, context, callback) {
-    this.umzug
-      .up()
-      .then(() => {
-        const response = {
-          statusCode: 200,
-          body: JSON.stringify({
-            message: 'Migration Up Complete',
-            input: event
-          })
-        };
-        callback(null, response);
+    const umzug = this.umzug;
+    Promise.resolve()
+    .then(()=>{
+      const client = new Client({
+        host: config.dbHost,
+        port: config.dbPort || 5432,
+        user: config.dbUser,
+        password: config.dbPass,
       })
-      .catch(error => {
-        callback(error, error);
-      });
+      client.query(`SELECT 1 FROM pg_catalog.pg_database WHERE datname = '${config.dbName}'`, (err, res) => {
+        if (err) throw err
+        console.log(res)
+        client.end()
+      })
+
+      // Check that the database exists
+      // dbConnection.query(`SELECT 1 FROM pg_catalog.pg_database WHERE datname = '${config.dbName}'`)
+      // .then((database)=>{
+      //   if(!database[1].rowCount) {
+      //     return dbConnection.query(`CREATE DATABASE '${config.dbName}'`);
+      //   }
+      //   return Promise.resolve()
+      // })
+      // .then(()=>{
+      //   console.log(`Finished checking ${config.dbName} exists before migrating`)
+      // })
+    })
+    .then(()=>{
+      umzug
+        .up()
+        .then(() => {
+          const response = {
+            statusCode: 200,
+            body: JSON.stringify({
+              message: 'Migration Up Complete',
+              input: event
+            })
+          };
+          callback(null, response);
+        })
+        .catch(error => {
+          callback(error, error);
+        });
+    })
   };
 
   down(event, context, callback) {
