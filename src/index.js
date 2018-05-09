@@ -38,9 +38,11 @@ export default class Migration {
             input: event
           })
         };
+        this.sequelize.close();
         callback(null, response);
       })
       .catch(error => {
+        this.sequelize.close();
         callback(error, error);
       });
   };
@@ -56,9 +58,11 @@ export default class Migration {
             input: event
           })
         };
+        this.sequelize.close();
         callback(null, response);
       })
       .catch(error => {
+        this.sequelize.close();
         callback(error, error);
       });
   };
