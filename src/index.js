@@ -1,5 +1,6 @@
 import Umzug from'umzug';
 import Sequelize from 'sequelize';
+import fs from 'fs';
 
 export default class Migration {
   constructor(config) {
@@ -22,7 +23,17 @@ export default class Migration {
       migrations: {
         params: [this.sequelize.getQueryInterface(), Sequelize],
         path: config.migrations,
-        pattern: /\.js$/
+        pattern: /\.js$/,
+        wrap: fn => () => fn(this.sequelize.getQueryInterface(), this.sequelize.constructor),
+        customResolver: (migrationPath) => {
+          const contents = fs.readFileSync(migrationPath, 'utf8');
+          const evaluated = eval(contents);
+
+          return {
+            up: evaluated.up,
+            down: evaluated.down,
+          };
+        },
       }
     });
   }
