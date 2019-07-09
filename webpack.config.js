@@ -8,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
     libraryTarget: 'umd',
-    library: '@packt/serverless-sequelize-migrate'
+    library: '@packt/serverless-sequelize-migrate',
   },
   module: {
     rules: [{
