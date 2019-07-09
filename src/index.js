@@ -38,6 +38,12 @@ export default class Migration {
     });
   }
 
+  /**
+   * Migrates new SQL to the DB
+   * @param {Object} event 
+   * @param {Object} context 
+   * @param {Function} callback 
+   */
   up(event, context, callback) {
     this.umzug
       .up()
@@ -58,6 +64,12 @@ export default class Migration {
       });
   };
 
+  /**
+   * Rollsback a migration to the DB
+   * @param {Object} event 
+   * @param {Object} context 
+   * @param {Function} callback 
+   */
   down(event, context, callback) {
     this.umzug
       .down()
