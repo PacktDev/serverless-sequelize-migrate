@@ -8,8 +8,10 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "prepublishOnly": "./node_modules/.bin/webpack --verbose"
+    "lint": "eslint ./src",
+    "test": "npm run lint",
+    "build": "babel src -d dist",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "author": {
     "name": "Packt Publishing Ltd",
@@ -30,12 +32,22 @@
     "noop2": "2.0.0",
     "pg": "7.11.0",
     "pg-hstore": "2.3.3",
-    "sequelize": "5.9.3",
+    "sequelize": "^5.9.3",
     "umzug": "2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.0",
+    "@babel/cli": "7.4.4",
+    "@babel/core": "7.5.0",
+    "@babel/node": "7.4.5",
+    "@babel/preset-env": "7.4.5",
+    "@babel/register": "7.4.4",
+    "aws-sdk-mock": "4.5.0",
     "babel-loader": "8.0.6",
+    "babel-plugin-dynamic-import-node": "2.3.0",
+    "babel-preset-env": "1.7.0",
+    "eslint": "6.0.1",
+    "eslint-config-airbnb-base": "13.2.0",
+    "eslint-plugin-import": "2.18.0",
     "webpack": "4.35.3",
     "webpack-cli": "3.3.5"
   }
